@@ -6,7 +6,7 @@
 <script>
   import _ from 'lodash'
   import echarts from 'echarts'
-  import {GET_O} from "~/util";
+  import {GET_O} from "../util";
 
   export default {
     name: "chart-home",
