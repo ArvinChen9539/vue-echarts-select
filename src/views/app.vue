@@ -2,13 +2,15 @@
   <div id="main">
     <v-head></v-head>
     <div class="main-body">
-      <button @click="test">测试</button>
-      <ChartHome @seleced="setSelected">
-        <BasePie></BasePie>
-        <BasePie></BasePie>
-        <BaseBar :chartData="chartData"></BaseBar>
-        <BasePie></BasePie>
-      </ChartHome>
+      <div><button @click="test">测试</button></div>
+      <chart-home @selected="setSelected" :is-multiple="isMultiple" class="chart-home" :clickFun="clickFun">
+        <div>
+        <base-pie :chartData="chartData" :colors="colors"></base-pie>
+        </div>
+        <div>
+        <base-bar :chartData="chartData"></base-bar>
+        </div>
+      </chart-home>
     </div>
     <v-foot></v-foot>
   </div>
@@ -27,16 +29,23 @@
     },
     data() {
       return {
-        chartData: [{name: 1, value: 10}, {name: 2, value: 20}, {name: 3, value: 30}]
+        isMultiple:true,
+        colors:['green','red'],
+        chartData: [{name: 1, value: 10}, {name: 2, value: 20}, {name: 3, value: 30}],
+        selected:[]
       }
     },
     methods: {
+      clickFun(){
+        console.log(arguments)
+      },
       setSelected(info) {
+        console.log(info);
         this.selected = info;
       },
       test() {
         _.each(this.chartData, (item, index) => {
-          item.value = _.random(1, 10)
+          item.value = _.random(50, 100)
           this.chartData.splice(index, 1, item)
         })
       }
@@ -55,5 +64,8 @@
     width: 100%;
     min-height: calc(100% - 100px);
     padding: 20px;
+  }
+  .chart-home > div{
+    display: inline-block;
   }
 </style>

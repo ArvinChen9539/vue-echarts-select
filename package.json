@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "图表选择组件",
   "author": "陈敬 <chenjing@physicalpoint.com>",
+  "main": "src/index.js",
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "npm run dev",

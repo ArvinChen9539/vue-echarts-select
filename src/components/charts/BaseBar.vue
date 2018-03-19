@@ -4,9 +4,10 @@
   </div>
 </template>
 <script>
+  import {chartProps,getConfig} from '../../config'
   export default {
     components: {},
-    props: {
+    props: Object.assign({},chartProps,{
       chartData: {
         default: () => {
           return []
@@ -37,8 +38,13 @@
             }]
           }
         }
+      },
+      chart:{
+        default:()=>{
+          return {}
+        }
       }
-    },
+    }),
     data() {
       return {
         selected: [],//选中的元素
@@ -48,6 +54,7 @@
     methods: {
       setData() {//设置数据
         this.option.legend.data = [];
+        this.option.series[0].data = [];
         this.option.series[0].name = '测试';
         _.each(this.chartData,(item)=>{
           this.option.legend.data.push(item.name)
@@ -58,12 +65,12 @@
     watch:{
       chartData(){
         this.setData()
-        this.$parent.initChart(this.$refs.chart,this.option,this._uid)
+        this.$parent.initChart(this.$refs.chart,this.option,Object.assign({},getConfig(this),{uid:this._uid}))
       }
     },
     mounted() {//初始化设置数据
       this.setData()
-      this.$parent.initChart(this.$refs.chart,this.option,this._uid)
+      this.$parent.initChart(this.$refs.chart,this.option,Object.assign({},getConfig(this),{uid:this._uid}))
     }
   }
 </script>

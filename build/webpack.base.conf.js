@@ -10,7 +10,7 @@ function resolve(dir) {
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    app: process.env.NODE_ENV=='production'?'./src/index.js':'./src/main.js'
   },
   output: {
     path: config.build.assetsRoot,
@@ -24,6 +24,7 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      '~': resolve('src')
     }
   },
   module: {
