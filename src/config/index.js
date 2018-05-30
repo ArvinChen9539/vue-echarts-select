@@ -29,9 +29,15 @@ let getConfig = (vm) =>{
   }
   return res;
 };
+
+const init = function(defOptions1,chartI1){
+  defOptions = defOptions1;
+  chartI = chartI1;
+};
 export {
   chartProps,
   getConfig,
   chartI,
-  defOptions
+  defOptions,
+  init
 }

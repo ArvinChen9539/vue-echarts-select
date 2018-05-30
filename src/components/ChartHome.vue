@@ -212,7 +212,7 @@
         let vm = this;
         //组合默认参数
         options = _.extend({},
-          JSON.parse(JSON.stringify(vm.$echartOptions)),
+          JSON.parse(JSON.stringify(vm.$echart.defOptions)),
           JSON.parse(JSON.stringify(vm.chartOption)), options);
         //组合颜色参数
         _.each(options.series, function (item, index) {

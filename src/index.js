@@ -20,8 +20,8 @@ const install = function(Vue, opts = {},chartI = {}) {
   Object.keys(components).forEach(key => {
     Vue.component(key, components[key]);
   });
-  Vue.prototype.$echartOptions = Object.assign(config.defOptions,opts);
-  Vue.prototype.$chartI = Object.assign(config.chartI,chartI);
+  config.init(Object.assign(config.defOptions,opts),Object.assign(config.chartI,chartI));
+  Vue.prototype.$echart = config;
 };
 
 // auto install
