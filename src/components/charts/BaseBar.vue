@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-  import {chartProps,getConfig} from '../../config'
+  import {chartProps,getConfig,chartI} from '../../config'
   export default {
     components: {},
     props: Object.assign({},chartProps,{
@@ -50,8 +50,11 @@
         selected: [],//选中的元素
       }
     },
-    computed: {},
+    computed: {
+
+    },
     methods: {
+      ...chartI,
       setData() {//设置数据
         this.option.legend.data = [];
         this.option.series[0].data = [];
@@ -64,13 +67,13 @@
     },
     watch:{
       chartData(){
-        this.setData()
-        this.$parent.initChart(this.$refs.chart,this.option,Object.assign({},getConfig(this),{uid:this._uid}))
+        this.setData();
+        this.$parent.initChart(this.$refs.chart,this.option,getConfig(this))
       }
     },
     mounted() {//初始化设置数据
-      this.setData()
-      this.$parent.initChart(this.$refs.chart,this.option,Object.assign({},getConfig(this),{uid:this._uid}))
+      this.setData();
+      this.$parent.initChart(this.$refs.chart,this.option,getConfig(this))
     }
   }
 </script>

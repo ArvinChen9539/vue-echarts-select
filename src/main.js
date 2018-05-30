@@ -6,7 +6,11 @@ import Vue from 'vue'
 import './css/common.css'
 import './css/reset.css'
 import App from './views/app.vue'
+import VueChart from './index';
 
+Vue.use(VueChart,{
+
+});
 new Vue({
   ...App
 }).$mount('#app')

@@ -3,9 +3,9 @@
     <v-head></v-head>
     <div class="main-body">
       <div><button @click="test">测试</button></div>
-      <chart-home @selected="setSelected" :is-multiple="isMultiple" class="chart-home" :clickFun="clickFun">
+      <chart-home @selected="setSelected" :is-click-mark="true" :is-multiple="isMultiple" class="chart-home" :clickFun="clickFun">
         <div>
-        <base-pie :chartData="chartData" :colors="colors"></base-pie>
+        <base-pie :chartData="chartData"></base-pie>
         </div>
         <div>
         <base-bar :chartData="chartData"></base-bar>

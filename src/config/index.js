@@ -7,12 +7,23 @@ let chartProps = {
     default: () => {
       return null
     }
-  }
+  },
+  backgroundColor:'',
+  noClickRender:false,//点击时是否不重新渲染
+  chartTitle:'',
+  chartSubtext:'',
+  clickFun:Function
 };
+
+let chartI = {
+
+};
+
+let defOptions = {};
 
 //获取子到父的图表配置项
 let getConfig = (vm) =>{
-  let res = {};
+  let res = {uid:vm._uid};
   for (let key of Object.keys(chartProps)) {
     res[key] = vm[key]
   }
@@ -20,5 +31,7 @@ let getConfig = (vm) =>{
 };
 export {
   chartProps,
-  getConfig
+  getConfig,
+  chartI,
+  defOptions
 }

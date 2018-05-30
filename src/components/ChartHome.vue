@@ -19,6 +19,9 @@
       }
     },
     props: {
+      isClickMark:{//点击时是否标记
+        default:false
+      },
       isCancel: {//是否禁止最后一个取消标记
         type: Boolean,
         default: false,
@@ -48,34 +51,7 @@
         type: Object,
         default: () => {
           return {
-            title: {
-              x: 'center',
-              show: false,
-              text: '',
-              textStyle: {
-                fontSize: 20
-              },
-              subtext: '',
-              subtextStyle: {
-                fontSize: 16
-              }
-            },
-            legend: {
-              textStyle: {
-                color: 'white'
-              },
-              orient: 'horizontal',
-              x: 'center'
-            },
-            /* grid: {
-               top: 50
-             },*/
-            tooltip: {
-              trigger: 'axis',
-              axisPointer: {
-                type: 'shadow'
-              }
-            }
+            title:{}
           }
         }
       },
@@ -86,10 +62,7 @@
             name: '',
             value: '',
             itemStyle: {
-              normal: {
-                shadowOffsetX: 0,
-                shadowOffsetY: 0
-              }
+              normal: {}
             }
           }
         }
@@ -101,13 +74,7 @@
             xy: {//类型名称
               type: [undefined, 'bar', 'line'],//包含的类型
               option: {//默认配置
-                xAxis: [{
-                  boundaryGap: ['20%', '20%'],
-                  axisLabel: {
-                    interval: 0,
-                    rotate: 30
-                  }
-                }]
+                xAxis: [{}]
               }
             },
             pie: {
@@ -126,17 +93,13 @@
             name: '',
             value: '',
             itemStyle: {
-              normal: {
-                shadowOffsetX: 0,
-                shadowOffsetY: 0
-              }
+              normal: {}
             }
           }
         }
       }
     },
     computed: {//计算属性
-
     },
     methods: {//函数
       /**
@@ -231,10 +194,7 @@
       },
       seriesItem(options) {
         return {//默认样式配置
-          barMaxWidth: 50,
-          barCategoryGap: '30%',
           selectedMode: options.selectedMode,
-          selectedOffset: 10,
           itemStyle: {//标记必要,不能为空
             normal: {}
           }
@@ -251,41 +211,33 @@
       initOptions(options, config) {//初始化图表配置项
         let vm = this;
         //组合默认参数
-        if (!config.p_noExtend) {
-          options = _.extend({}, vm.chartOption, options);
-        }
-
+        options = _.extend({},
+          JSON.parse(JSON.stringify(vm.$echartOptions)),
+          JSON.parse(JSON.stringify(vm.chartOption)), options);
         //组合颜色参数
-        if (!config.p_noSeriesE) {
-          _.each(options.series, function (item, index) {
-            if (!config.p_noSeriesItemE) {
-              //饼图官方交互
-              //为饼图判断多选和单选
-              if ((config.isMultiple || vm.isMultiple) && !config.p_noClickMark) {//多选
-                options.series[index] = _.extend({}, vm.seriesItem({}), item);
-              } else if ((config.clickFun || parent.clickFun) && !config.p_noClickMark) {//单选
-                options.series[index] = _.extend({}, vm.seriesItem({}), item);
-              } else {//没有交互效果
-                options.series[index] = _.extend({}, vm.seriesItem({}), item);
-              }
+        _.each(options.series, function (item, index) {
+          //饼图官方交互
+          //为饼图判断多选和单选
+          if ((config.isMultiple || vm.isMultiple) && vm.isClickMark) {//多选
+            options.series[index] = _.extend({}, vm.seriesItem({}), item);
+          } else if ((config.clickFun || parent.clickFun) && vm.isClickMark) {//单选
+            options.series[index] = _.extend({}, vm.seriesItem({}), item);
+          } else {//没有交互效果
+            options.series[index] = _.extend({}, vm.seriesItem({}), item);
+          }
 
-            }
-            //组合标准data
-            if (!config.p_noDataE) {
-              _.each(item.data, function (dItem, dIndex) {
-                if (_.isObject(dItem)) {
-                  options.series[index].data[dIndex] = _.extend({}, JSON.parse(JSON.stringify(vm.dataItem)), dItem);
-                } else {
-                  options.series[index].data[dIndex] = _.extend({}, JSON.parse(JSON.stringify(vm.dataItem)), {value: dItem});
-                }
-              });
+          //组合标准data
+          _.each(item.data, function (dItem, dIndex) {
+            if (_.isObject(dItem)) {
+              options.series[index].data[dIndex] = _.extend({}, JSON.parse(JSON.stringify(vm.dataItem)), dItem);
+            } else {
+              options.series[index].data[dIndex] = _.extend({}, JSON.parse(JSON.stringify(vm.dataItem)), {value: dItem});
             }
           });
-        }
+        });
 
         //初始化参数
         vm.p_clickIndex = [];
-
 
         //直角系图标坐标系默认配置
         if (vm.isChart('xy', options)) {
@@ -339,7 +291,7 @@
           chart.off('click');//清除点击事件
           chart.on('click', function (params) {
             //点击标记
-            if (!config.p_noClickMark) {
+            if (vm.isClickMark) {
               vm.clickMark(params, options, config);
             }
             if (config.clickFun) {
@@ -351,12 +303,11 @@
             }
             //改变图表颜色配置后立即重新加载图表配置
             //饼图不用重设配置,手动设置不渲染的不执行渲染操作
-            if (!config.p_noClickRender) {
+            if (!config.noClickRender) {
               _.each(vm.charts, (item, index) => {
                 item.setOption(vm.allOptions[index]);
               });
             }
-
             //发送选中事件
             vm.$emit("selected", vm.selected);
           });
@@ -368,7 +319,7 @@
         }*/
         vm.charts[config.uid] = chart;
         vm.allOptions[config.uid] = options;
-        chart.setOption(_.extend({}, vm.chartOption, options));
+        chart.setOption(options);
       }
     },
     mounted() {
